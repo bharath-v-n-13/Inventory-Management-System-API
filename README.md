@@ -1,24 +1,24 @@
 # 📦 Inventory Management System API
 
-A backend REST API built using **Spring Boot 3** and **MySQL** for managing warehouse products, stock, and inventory levels.  
-It provides full CRUD functionality, stock increase/decrease operations, and low-stock monitoring.
+A backend REST API built with Spring Boot 3 and MySQL for managing warehouse products, stock, and inventory levels.  
+Provides full CRUD functionality, safe stock increase/decrease operations, and low-stock monitoring.
 
 ---
 
 ## 🚀 Features
 
-✅ Full CRUD operations for products  
-✅ Business logic to prevent negative stock levels  
-✅ Endpoints to **increase/decrease stock** safely  
-✅ Low stock threshold alerts and filtering  
-✅ Proper error handling and response messages  
-✅ Unit tests for core inventory operations  
+- ✅ Full CRUD operations for products
+- ✅ Business logic to prevent negative stock levels
+- ✅ Endpoints to increase/decrease stock safely
+- ✅ Low stock threshold alerts and filtering
+- ✅ Proper error handling and response messages
+- ✅ Unit tests for core inventory operations
 
 ---
 
 ## 🗂️ Project Structure
 
-```plaintext
+```
 inventory-api/
 ├── src/
 │   ├── main/
@@ -35,110 +35,144 @@ inventory-api/
 │       └── java/com/inventory/api/      # Unit & integration tests
 ├── pom.xml
 └── README.md
-⚙️ Tech Stack
-Java 21
+```
 
-Spring Boot 3.x
+---
 
-Spring Data JPA
+## ⚙️ Tech Stack
 
-MySQL
+- ☕ Java 21
+- 🧩 Spring Boot 3.x
+- 🗃️ Spring Data JPA
+- 🐬 MySQL
+- 🔧 Maven
+- 🧪 Postman (for API testing)
 
-Maven
+---
 
-Postman (for API testing)
+## 🛠️ Setup Instructions
 
-🏗️ Setup Instructions
-1️⃣ Clone the repository
-bash
-Copy code
-git clone https://github.com/YOUR-USERNAME/Inventory-Management-System-API.git
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/bharath-v-n-13/Inventory-Management-System-API.git
 cd Inventory-Management-System-API/inventory-api
-2️⃣ Configure MySQL Database
-Open src/main/resources/application.properties and update credentials:
+```
 
-properties
-Copy code
+### 2. Configure MySQL Database
+
+In `src/main/resources/application.properties`:
+
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/inventory_db
 spring.datasource.username=root
 spring.datasource.password=YOUR_PASSWORD
+
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
-3️⃣ Build and run the application
-bash
-Copy code
+```
+
+> Replace `YOUR_PASSWORD` with your actual MySQL password.  
+> Ensure that the database `inventory_db` exists (or update the name accordingly).
+
+### 3. Build & Run
+
+```bash
 mvn clean package
 mvn spring-boot:run
-Application will start at:
-👉 http://localhost:8080
+```
 
-🧪 API Endpoints
-🔹 Product CRUD
-Method	Endpoint	Description
-POST	/api/products	Create a new product
-GET	/api/products	Get all products
-GET	/api/products/{id}	Get product by ID
-PUT	/api/products/{id}	Update a product
-DELETE	/api/products/{id}	Delete a product
+The application will start at:  
+[http://localhost:8080](http://localhost:8080)
 
-🔹 Stock Operations
-Method	Endpoint	Description
-POST	/api/products/{id}/addStock	Increase stock quantity
-POST	/api/products/{id}/removeStock	Decrease stock quantity (checks for sufficient stock)
+---
 
-Example Body:
+## 📡 API Endpoints
 
-json
-Copy code
-{
-  "amount": 5
-}
-🔹 Low Stock Products
-Method	Endpoint	Description
-GET	/api/products/low-stock	Get products below their low stock threshold
+### 🔹 Product CRUD
 
-📘 Example JSON for Creating a Product
-json
-Copy code
-{
-  "name": "iPhone 17 Pro Max",
-  "description": "Latest Apple flagship phone",
-  "stockQuantity": 10,
-  "lowStockThreshold": 3
-}
-🧰 Running Tests
-To execute all unit tests:
+| Method | Endpoint                | Description            |
+|--------|------------------------|------------------------|
+| POST   | `/api/products`        | Create a new product   |
+| GET    | `/api/products`        | Get all products       |
+| GET    | `/api/products/{id}`   | Get product by ID      |
+| PUT    | `/api/products/{id}`   | Update a product       |
+| DELETE | `/api/products/{id}`   | Delete a product       |
 
-bash
-Copy code
+### 🔹 Stock Operations
+
+- **Add Stock**
+
+  ```
+  POST /api/products/{id}/addStock
+  Content-Type: application/json
+
+  {
+    "amount": 5
+  }
+  ```
+
+- **Remove Stock**
+
+  ```
+  POST /api/products/{id}/removeStock
+  Content-Type: application/json
+
+  {
+    "amount": 3
+  }
+  ```
+
+  > 🧠 Automatically prevents stock from going negative.
+
+- **Low Stock Products**
+
+  ```
+  GET /api/products/low-stock
+  ```
+
+  Returns products where `stockQuantity < lowStockThreshold`.
+
+---
+
+## 🧪 Running Tests
+
+```bash
 mvn test
-This runs JUnit tests for:
+```
 
-Stock increase logic
+Covers:
+- Stock increase/decrease logic
+- CRUD operations
+- Validation for low stock and negative stock
 
-Stock decrease logic (including edge cases)
+---
 
-Product CRUD operations
+## 🧰 Postman Collection
 
-🧩 Postman Collection
-A Postman collection is included for easy API testing:
-📁 inventory-api-postman-collection.json
+If you have a Postman collection file (e.g. `inventory-api-postman-collection.json`):
 
-To use:
+1. Open Postman → Import
+2. Select the JSON file
+3. Set variable `{{baseUrl}}` = `http://localhost:8080`
+4. Run the API requests
 
-Open Postman → Import
+---
 
-Choose the .json collection file
+## 🧱 Design Notes
 
-Set {{baseUrl}} to http://localhost:8080
+- Prevents negative stock automatically.
+- Service layer contains business logic; controllers stay clean.
+- Consistent error handling with descriptive messages.
+- Easy to extend with authentication, roles, or reporting.
 
-Test all API endpoints directly
+---
 
-💡 Design Choices & Assumptions
-Stock cannot go below zero.
+## 👨‍💻 Author
 
-Low stock is determined by comparing stock_quantity with low_stock_threshold.
+**Bharath V N**  
+GitHub: [bharath-v-n-13/Inventory-Management-System-API](https://github.com/bharath-v-n-13/Inventory-Management-System-API)
 
-Errors (e.g., invalid product ID, insufficient stock) return a structured JSON response.
+---
 
-Business logic is isolated in the service layer for testability.
+⭐ If you found this project useful, give it a star on GitHub! ⭐
